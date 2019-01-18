@@ -1,6 +1,10 @@
 package com.example.demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -9,14 +13,23 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "Project Name is required")
     private String projectName;
+    @NotBlank(message = "Project Identifier is required")
+    @Size(min = 4,max = 5,message = "PLease use 4-5 characters")
+    @Column(updatable = false,unique = true)
     private String projectIdentifier;
+    @NotBlank(message = "Project Description is required")
     private String description;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date start_date;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date end_date;
 
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date created_At;
-    private Date upadted_At;
+    @JsonFormat(pattern = "yyyy-mm-dd")
+    private Date updated_At;
 
     public Project() {
     }
@@ -77,12 +90,12 @@ public class Project {
         this.created_At = created_At;
     }
 
-    public Date getUpadted_At() {
-        return upadted_At;
+    public Date getUpdated_At() {
+        return updated_At;
     }
 
-    public void setUpadted_At(Date upadted_At) {
-        this.upadted_At = upadted_At;
+    public void setUpdated_At(Date updated_At) {
+        this.updated_At = updated_At;
     }
 
     @PrePersist
@@ -92,7 +105,7 @@ public class Project {
 
     @PreUpdate
     protected void onUpdate(){
-        this.upadted_At = new Date();
+        this.updated_At = new Date();
     }
 
 }
